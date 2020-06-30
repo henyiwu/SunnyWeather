@@ -3,6 +3,9 @@ package com.henyiwu.sunnyweather
 import android.app.Application
 import android.content.Context
 
+/**
+ * 全局Application类
+ */
 class SunnyWeatherApplication : Application() {
     companion object {
         /**天气请求令牌**/
@@ -15,4 +18,5 @@ class SunnyWeatherApplication : Application() {
         super.onCreate()
         context = applicationContext
     }
+
 }
