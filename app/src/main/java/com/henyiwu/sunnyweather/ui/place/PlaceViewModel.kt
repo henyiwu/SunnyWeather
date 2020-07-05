@@ -9,6 +9,7 @@ import com.henyiwu.sunnyweather.logic.Repository
 import com.henyiwu.sunnyweather.logic.model.Place
 
 class PlaceViewModel : ViewModel() {
+
     private val searchLiveData = MutableLiveData<String>()
 
     val placeList = ArrayList<Place>()
