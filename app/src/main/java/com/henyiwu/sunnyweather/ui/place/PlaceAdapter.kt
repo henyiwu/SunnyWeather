@@ -12,7 +12,7 @@ import com.henyiwu.sunnyweather.logic.model.Place
 import com.henyiwu.sunnyweather.ui.weather.WeatherActivity
 import kotlinx.android.synthetic.main.place_item.view.*
 
-class PlaceAdapter(private val fragment: Fragment, private val placeList: List<Place>):
+class PlaceAdapter(private val fragment: PlaceFragment, private val placeList: List<Place>):
     RecyclerView.Adapter<PlaceAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaceAdapter.ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.place_item, parent, false)
@@ -25,7 +25,9 @@ class PlaceAdapter(private val fragment: Fragment, private val placeList: List<P
                 putExtra("location_lat", place.location.lat)
                 putExtra("place_name", place.name)
             }
+            fragment.viewModel.savePlace(place)
             fragment.startActivity(intent)
+            fragment.activity?.finish()
         }
         return holder
     }

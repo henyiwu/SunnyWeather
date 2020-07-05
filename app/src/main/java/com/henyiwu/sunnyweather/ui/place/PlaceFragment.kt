@@ -1,5 +1,6 @@
 package com.henyiwu.sunnyweather.ui.place
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,11 +13,15 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.henyiwu.sunnyweather.R
 import com.henyiwu.sunnyweather.logic.model.Place
+import com.henyiwu.sunnyweather.ui.weather.WeatherActivity
 import kotlinx.android.synthetic.main.fragment_place.*
 
+/**
+ * 最开始启动的界面，如果之前已经选中某个城市，则关闭这个activity，并且跳转到WeatherActivity
+ */
 class PlaceFragment : Fragment() {
 
-    private val viewModel by lazy {
+    val viewModel by lazy {
         ViewModelProvider(this).get(PlaceViewModel::class.java)
     }
 
@@ -32,6 +37,17 @@ class PlaceFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        if (viewModel.isPlaceSaved()) {
+            val place = viewModel.getSavedPlace()
+            val intent = Intent(context, WeatherActivity::class.java).apply {
+                putExtra("location_lng", place.location.lng)
+                putExtra("location_lat", place.location.lat)
+                putExtra("place_name", place.name)
+            }
+            startActivity(intent)
+            activity?.finish()
+            return
+        }
         val layoutManager = LinearLayoutManager(activity)
         recyclerView.layoutManager = layoutManager
         adapter = PlaceAdapter(this, viewModel.placeList)

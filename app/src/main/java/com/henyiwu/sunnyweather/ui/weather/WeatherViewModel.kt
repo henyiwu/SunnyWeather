@@ -19,10 +19,12 @@ class WeatherViewModel: ViewModel() {
 
     var placeName = ""
 
+    /**因为LiveData对象是调用其他类获取的，每次获得的都是新的对象，所以要通过switchMap转换**/
     val weatherLiveData = Transformations.switchMap(locationLiveData) {location ->
         Repository.refreshWeather(location.lng, location.lat)
     }
 
+    /**locationLiveData的数据发生变化后，观察locationLiveData的switchMap()会执行**/
     fun refreshWeather(lng: String, lat: String) {
         locationLiveData.value = Location(lng, lat)
     }

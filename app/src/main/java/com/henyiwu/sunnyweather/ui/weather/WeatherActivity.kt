@@ -25,14 +25,13 @@ import java.util.*
 class WeatherActivity : AppCompatActivity() {
 
     private final val TAG: String = "WeatherActivity"
-    val viewModel by lazy { ViewModelProvider(this).get(WeatherViewModel::class.java) }
+    private val viewModel by lazy {
+        ViewModelProvider(this).get(WeatherViewModel::class.java)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window.statusBarColor = Color.TRANSPARENT
-        }
-        if (Build.VERSION.SDK_INT >= 21) {
             window.decorView.systemUiVisibility =
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
             window.statusBarColor = Color.TRANSPARENT
@@ -47,6 +46,11 @@ class WeatherActivity : AppCompatActivity() {
         if (viewModel.placeName.isEmpty()) {
             viewModel.placeName = intent.getStringExtra("place_name") ?: ""
         }
+        /**
+         * 观察weatherLiveData，weatherLiveData是switchMap将locationLiveData转换所得的对象，则
+         * locationLiveData的数据发生变化，weatherLiveData的观察者会响应，执行代码块。
+         * 即viewModel.refreshWeather() -> locationLiveData -> weatherLiveData -> Observer
+         */
         viewModel.weatherLiveData.observe(this, Observer { result ->
             val weather = result.getOrNull()
             if (weather != null) {

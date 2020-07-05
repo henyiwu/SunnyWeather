@@ -3,6 +3,7 @@ package com.henyiwu.sunnyweather.logic
 import android.content.Context
 import android.util.Log
 import androidx.lifecycle.liveData
+import com.henyiwu.sunnyweather.logic.dao.PlaceDao
 import com.henyiwu.sunnyweather.logic.model.Place
 import com.henyiwu.sunnyweather.logic.model.Weather
 import com.henyiwu.sunnyweather.logic.network.SunnyWeatherNetwork
@@ -55,7 +56,6 @@ object Repository {
             val deferredDaily = async {
                 SunnyWeatherNetwork.getDailyWeather(lng, lat)
             }
-            // deferredRealtime.await()这里卡住了
             val dailyResponse = deferredDaily.await()
             val realtimeResponse = deferredRealtime.await()
             if (realtimeResponse.status == "ok" && dailyResponse.status == "ok") {
@@ -87,4 +87,10 @@ object Repository {
             }
             emit(result)
         }
+
+    fun savePlace(place: Place) = PlaceDao.savePlace(place)
+
+    fun getSavedPlace() = PlaceDao.getSavedPlace()
+
+    fun isPlaceSaved() = PlaceDao.isPlaceShaved()
 }
